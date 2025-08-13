@@ -1,0 +1,57 @@
+[Unit]
+Description=GRE Word Management System (Secure Version)
+Documentation=https://github.com/your-repo/gre-word-pusher
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=your_user
+Group=www-data
+WorkingDirectory=/home/your_user/gre_word_pusher
+
+# 环境变量配置
+Environment=GRE_SECRET_KEY=your-super-secret-key-change-me-123
+Environment=GRE_PASSWORD=your-secure-password-456
+Environment=GRE_CSV_PATH=/home/your_user/gre_word_pusher/words.csv
+Environment=PYTHONPATH=/home/your_user/gre_word_pusher
+
+# 启动命令
+ExecStart=/usr/bin/gunicorn \
+    --workers 1 \
+    --bind 127.0.0.1:8000 \
+    --timeout 30 \
+    --keepalive 2 \
+    --max-requests 1000 \
+    --max-requests-jitter 50 \
+    --preload \
+    app:app
+
+# 健康检查
+ExecStartPre=/usr/bin/python3 /home/your_user/gre_word_pusher/health_check.py --quiet
+ExecReload=/bin/kill -s HUP $MAINPID
+
+# 重启策略
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=/home/your_user/gre_word_pusher
+
+# 资源限制
+MemoryMax=512M
+TasksMax=50
+
+# 日志设置
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gre-app
+
+[Install]
+WantedBy=multi-user.target

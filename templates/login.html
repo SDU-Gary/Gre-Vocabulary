@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - GRE单词管理</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: #333; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .container { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 400px; 
+        }
+        h1 { 
+            text-align: center; 
+            color: #5a67d8; 
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        form { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 1.5rem; 
+        }
+        input[type="password"] { 
+            padding: 1rem; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 8px; 
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #5a67d8;
+        }
+        button { 
+            padding: 1rem; 
+            background-color: #5a67d8; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+        button:hover { 
+            background-color: #434190; 
+        }
+        .flash { 
+            padding: 1rem; 
+            margin-bottom: 1.5rem; 
+            border-radius: 8px; 
+            text-align: center; 
+            font-weight: 500;
+        }
+        .flash.error { 
+            background-color: #fed7d7; 
+            color: #c53030; 
+            border: 1px solid #feb2b2;
+        }
+        .flash.success { 
+            background-color: #d1fae5; 
+            color: #065f46; 
+            border: 1px solid #a7f3d0;
+        }
+        .security-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f7fafc;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 GRE单词管理</h1>
+        <div class="subtitle">请输入访问密码</div>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash {% if '成功' in messages[0] %}success{% else %}error{% endif %}">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form method="post">
+            <input type="password" 
+                   name="password" 
+                   placeholder="输入密码" 
+                   required 
+                   autocomplete="current-password">
+            <button type="submit">🔐 登录</button>
+        </form>
+        
+        <div class="security-note">
+            <strong>安全提示:</strong><br>
+            • 默认密码: gre2024<br>
+            • 建议通过环境变量 GRE_PASSWORD 修改密码<br>
+            • 登录状态将在浏览器关闭后失效
+        </div>
+    </div>
+</body>
+</html>
