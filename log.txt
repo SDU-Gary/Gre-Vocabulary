@@ -1,0 +1,32 @@
+root@racknerd-a927577:~/gre_word_pusher# sudo systemctl status gre_app.service
+● gre_app.service - GRE Word Management System (Secure Version)
+     Loaded: loaded (/etc/systemd/system/gre_app.service; enabled; vendor preset: enabled)
+     Active: active (running) since Wed 2025-08-13 14:59:03 UTC; 6min ago
+       Docs: https://github.com/SDU-Gary/Gre-Vocabulary
+   Main PID: 4382 (python3)
+      Tasks: 2 (limit: 50)
+     Memory: 25.6M (max: 512.0M available: 486.3M)
+        CPU: 292ms
+     CGroup: /system.slice/gre_app.service
+             ├─4382 python3 -m gunicorn --workers 1 --bind 127.0.0.1:8000 --timeout 30 app:app
+             └─4383 python3 -m gunicorn --workers 1 --bind 127.0.0.1:8000 --timeout 30 app:app
+
+Aug 13 14:59:03 racknerd-a927577 systemd[1]: Starting GRE Word Management System (Secure Version)...
+Aug 13 14:59:03 racknerd-a927577 systemd[1]: Started GRE Word Management System (Secure Version).
+Aug 13 14:59:03 racknerd-a927577 gre-app[4382]: [2025-08-13 14:59:03 +0000] [4382] [INFO] Starting gunicorn 23.0.0
+Aug 13 14:59:03 racknerd-a927577 gre-app[4382]: [2025-08-13 14:59:03 +0000] [4382] [INFO] Listening at: http://127.0.0.1:8000 (4382)
+Aug 13 14:59:03 racknerd-a927577 gre-app[4382]: [2025-08-13 14:59:03 +0000] [4382] [INFO] Using worker: sync
+Aug 13 14:59:03 racknerd-a927577 gre-app[4383]: [2025-08-13 14:59:03 +0000] [4383] [INFO] Booting worker with pid: 4383
+
+
+root@racknerd-a927577:~/gre_word_pusher# journalctl -u gre_app.service --since "30 seconds ago"
+-- No entries --
+root@racknerd-a927577:~/gre_word_pusher# journalctl -u gre_app.service --since "2 seconds ago"
+-- No entries --
+
+
+root@racknerd-a927577:~/gre_word_pusher# netstat -tulnp | grep 8000
+tcp        0      0 127.0.0.1:8000          0.0.0.0:*               LISTEN      4382/python3  
+
+root@racknerd-a927577:~/gre_word_pusher#   cd /root/gre_word_pusher && python3 -c "import app; print('OK')"
+OK

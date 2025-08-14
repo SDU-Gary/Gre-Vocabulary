@@ -222,8 +222,59 @@
                        autocomplete="off">
             </div>
             
-            <button type="submit">➕ 添加到单词库</button>
+            <button type="submit" id="submitBtn">➕ 添加到单词库</button>
         </form>
+        
+        <script>
+        // 改善表单提交体验，减少扩展冲突
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const submitBtn = document.getElementById('submitBtn');
+            const wordInput = document.getElementById('word');
+            const definitionInput = document.getElementById('definition');
+            
+            form.addEventListener('submit', function(e) {
+                // 禁用提交按钮防止重复提交
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ 添加中...';
+                
+                // 简单的客户端验证
+                const word = wordInput.value.trim();
+                const definition = definitionInput.value.trim();
+                
+                if (!word || !definition) {
+                    e.preventDefault();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '➕ 添加到单词库';
+                    alert('请填写完整的单词和释义');
+                    return;
+                }
+                
+                if (word.length > 50 || definition.length > 200) {
+                    e.preventDefault();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '➕ 添加到单词库';
+                    alert('单词或释义过长，请检查输入');
+                    return;
+                }
+                
+                // 表单正常提交，添加小延迟避免扩展冲突
+                setTimeout(function() {
+                    if (submitBtn.disabled) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '➕ 添加到单词库';
+                    }
+                }, 3000);
+            });
+            
+            // 表单提交成功后清空输入
+            if (window.location.hash === '#success') {
+                wordInput.value = '';
+                definitionInput.value = '';
+                history.replaceState(null, null, window.location.pathname);
+            }
+        });
+        </script>
         
         <div class="tips">
             <h3>💡 使用提示</h3>

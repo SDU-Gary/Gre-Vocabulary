@@ -52,13 +52,33 @@ gre_word_pusher/
 
 ### 一键部署（推荐）
 ```bash
-# 1. 上传所有文件到VPS的某个目录
+# 1. 克隆项目到VPS
+git clone https://github.com/SDU-Gary/Gre-Vocabulary.git
+cd Gre-Vocabulary
+
 # 2. 运行部署脚本
 chmod +x deploy.sh
 ./deploy.sh
 
-# 3. 验证部署
+# 3. 修复推送和时区问题
+chmod +x deploy_fix.sh
+./deploy_fix.sh
+
+# 4. 验证部署
 ./verify.sh
+```
+
+### 推送功能修复
+如果遇到中文推送问题：
+```bash
+# 测试推送功能
+python3 test_push.py
+
+# 应用修复
+cp push_words_fixed.py push_words.py
+
+# 手动测试
+python3 push_words.py
 ```
 
 ### 手动部署

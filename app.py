@@ -124,15 +124,27 @@ def index():
             return redirect(url_for('index'))
         
         # 添加单词
+        success = False
         try:
             if add_word_to_csv(word, definition):
                 flash(f"✅ 成功添加单词: {word}")
+                success = True
             else:
                 flash('❌ 添加失败，请重试或联系管理员')
         except Exception as e:
             flash(f'添加单词时出错: {str(e)}')
-            
-        return redirect(url_for('index'))
+        
+        # 使用更稳定的重定向，添加小延迟以确保扩展脚本完成
+        import time
+        time.sleep(0.1)  # 100ms延迟
+        
+        # 如果成功添加，在URL中添加成功标识
+        redirect_url = url_for('index') + ('#success' if success else '')
+        response = redirect(redirect_url)
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache' 
+        response.headers['Expires'] = '0'
+        return response
 
     return render_template('index.html')
 

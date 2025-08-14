@@ -137,7 +137,8 @@ def send_notification_with_retry(topic, words_to_review, max_retries=3):
                 headers={
                     "Title": f"GRE 单词复习！({len(words_to_review)}词)",
                     "Priority": "high",
-                    "Tags": "brain,study"
+                    "Tags": "brain,study",
+                    "Content-Type": "text/plain; charset=utf-8"
                 },
                 timeout=10  # 10秒超时
             )
